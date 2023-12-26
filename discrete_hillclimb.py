@@ -33,7 +33,44 @@ def generate_random_assignment(worker_time: int, ride_times: Dict[str, int], can
     if complete_assignment == {}:
         raise Exception("No assignment exists, problem is overconstrained.")
     
-    # Now hillclimb this assignment
+    def hillclimb(complete_assignment: Dict[str, str], complete_worker_times_remaining: Dict[str, int]) -> bool:
+        """
+        Try to hillclimb (improve the assignment). Randomized to find different local optimums.
+        Return whether further hillclimbing is possible.
+        """
+        def try_transfer_ride(transferring_worker: str) -> Tuple[str, str] | None:
+            """
+            Try to transfer a ride from the transferring worker. Returns None on failure.
+            A: accepting_worker time remaining.
+            T: transferring_worker time remaining.
+            |(A - delta) - (T + delta)| < |A - T| <=> Transfer success.
+            """
+            transferring_worker_time_remaining = complete_worker_times_remaining[transferring_worker]
+            rides_to_transfer = [ride for ride in complete_assignment if complete_assignment[ride] == transferring_worker]
+            random.shuffle(rides_to_transfer)
+            for ride in rides_to_transfer:
+                ride_time = ride_times[ride]
+                accepting_workers = filter(lambda worker: worker != transferring_worker and ride in can_check[worker], can_check.keys())
+                for accepting_worker in accepting_workers:
+                    accepting_worker_time_remaining = complete_worker_times_remaining[accepting_worker]
+                    if accepting_worker_time_remaining > transferring_worker_time_remaining and abs(accepting_worker_time_remaining - transferring_worker_time_remaining - 2 * ride_time) < abs(accepting_worker_time_remaining - transferring_worker_time_remaining):
+                        return ride, accepting_worker
+            return None
+        transferring_workers = list(can_check.keys()) # All workers.
+        random.shuffle(transferring_workers)
+        for transferring_worker in transferring_workers:
+            # Choose random worker that will try to give one of its rides to a worker.
+            if (res := try_transfer_ride(transferring_worker)):
+                ride_transferred = res[0]
+                accepting_worker = res[1]
+                complete_assignment[ride_transferred] = accepting_worker
+                complete_worker_times_remaining[transferring_worker] += ride_times[ride_transferred]
+                complete_worker_times_remaining[accepting_worker] -= ride_times[ride_transferred]
+                return True
+        return False
+
+    while hillclimb(complete_assignment, complete_worker_times_remaining):
+        pass
     return complete_assignment, complete_worker_times_remaining
 
 
@@ -52,5 +89,3 @@ if __name__ == '__main__':
         'WC': {'RE', 'RD'}
     }
     print(generate_random_assignment(worker_time, ride_times, can_check))
-
-# TODO: Perform hill climbing on the objective of minimizing the maximum work time for any worker.
