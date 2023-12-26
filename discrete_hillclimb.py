@@ -3,7 +3,10 @@ import random
 
 
 def generate_random_assignment(worker_time: int, ride_times: Dict[str, int], can_check: Dict[str, Set[str]]) -> Tuple[Dict[str, str], Dict[str, int]]:
-    
+    """
+    Find a complete assignment using dfs (backtracking), then improve the complete assignment using hillclimbing.
+    Returns a random locally optimal assignment {ride: worker...} and the remaining times of the workers {worker: time...}.
+    """
     def dfs(partial_assignment: Dict[str, str], partial_worker_times_remaining: Dict[str, int]) -> Tuple[Dict[str, str], Dict[str, int]]:
         """
         partial_assignment: Dictionary of {ride: worker...} containing a subset of rides.
