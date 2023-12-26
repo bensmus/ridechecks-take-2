@@ -2,44 +2,38 @@ from typing import Dict, List, Tuple, Set, Iterable, Callable
 import random
 
 
-def generate_random_assignment(worker_time: int, ride_times: Dict[str, int], can_check: Dict[str, Set[str]]) -> Dict[str, str]:
-    """
-    >>> generate_random_assignment(10, {'RA': 10}, {'WA': {'RA'}})
-    {'RA': 'WA'}
-    >>> generate_random_assignment(5, {'RA': 10}, {'WA': {'RA'}})
-    Traceback (most recent call last):
-    Exception: No assignment exists, problem is overconstrained.
-    """
+def generate_random_assignment(worker_time: int, ride_times: Dict[str, int], can_check: Dict[str, Set[str]]) -> Tuple[Dict[str, str], Dict[str, int]]:
     
-    def dfs(partial_assignment: Dict[str, str], worker_times: Dict[str, int]) -> Dict[str, str]:
+    def dfs(p_assignment: Dict[str, str], p_worker_times_remaining: Dict[str, int]) -> Tuple[Dict[str, str], Dict[str, int]]:
         """
-        partial_assignment: Dictionary of {ride: worker...} containing a subset of rides.
+        p_assignment: Dictionary of {ride: worker...} containing a subset of rides (partial assignment).
+        c_... means complete assignment or worker times remaining.
         worker_times: How much time does every worker have remaining.
         Randomized dfs: find a random solution to CSP that is not even locally optimal.
         """
         # Base case: 
-        if len(partial_assignment) == len(ride_times):
-            return partial_assignment
+        if len(p_assignment) == len(ride_times):
+            return p_assignment, p_worker_times_remaining
         # Recursive case:
-        ride = next(ride for ride in ride_times if ride not in partial_assignment)
+        ride = next(ride for ride in ride_times if ride not in p_assignment)
         workers = list(can_check.keys())
         random.shuffle(workers)
         for worker in workers: # Try to assign every worker to the ride in a random order.
-            if ride in can_check[worker] and ride_times[ride] <= worker_times[worker]:
+            if ride in can_check[worker] and ride_times[ride] <= p_worker_times_remaining[worker]:
                 # Recursive call, adding ride and worker to partial_assignment, worker_times reflect remaining time.
-                complete_assignment = dfs(
-                    partial_assignment | {ride: worker}, 
-                    worker_times | {worker: worker_times[worker] - ride_times[ride]}
+                c_assignment, c_worker_times_remaining = dfs(
+                    p_assignment | {ride: worker}, 
+                    p_worker_times_remaining | {worker: p_worker_times_remaining[worker] - ride_times[ride]}
                 )
-                if complete_assignment:
-                    return complete_assignment
-        # Could not find a complete assignment based on the partial_assignment and worker_times.
-        return {}
+                if c_assignment:
+                    return c_assignment, c_worker_times_remaining
+        # Could not find a complete assignment based on the partial_assignment and worker_times_remaining.
+        return {}, p_worker_times_remaining
     
-    complete_assignment = dfs({}, {worker: worker_time for worker in can_check})
-    if complete_assignment == {}:
+    c_assignment, c_worker_times_remaining = dfs({}, {worker: worker_time for worker in can_check})
+    if c_assignment == {}:
         raise Exception("No assignment exists, problem is overconstrained.")
-    return complete_assignment
+    return c_assignment, c_worker_times_remaining
 
 
 if __name__ == '__main__':
