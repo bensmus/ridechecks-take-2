@@ -40,11 +40,19 @@ def generate_random_assignment(worker_time: int, ride_times: Dict[str, int], can
         """
         def try_transfer_ride(transferring_worker: str) -> Tuple[str, str] | None:
             """
-            Try to transfer a ride from the transferring worker. Returns None on failure.
+            Transfer rides from transferring_worker to another if it results in a better 
+            balance of remaining time among the workers.
+
             A: accepting_worker time remaining.
             T: transferring_worker time remaining.
-            |(A - delta) - (T + delta)| < |A - T| <=> Transfer success.
+            |(A - delta) - (T + delta)| < |A - T| <=> Should transfer.
+
+            Returns ride, accepting_worker if transfer occurs, otherwise returns None.
             """
+            def should_transfer(accepting_worker_time_remaining: int, transferring_worker_time_remaining: int, ride_time: int) -> bool:
+                new_diff = abs(accepting_worker_time_remaining - transferring_worker_time_remaining - 2 * ride_time)
+                old_diff = abs(accepting_worker_time_remaining - transferring_worker_time_remaining)
+                return new_diff < old_diff and accepting_worker_time_remaining > transferring_worker_time_remaining      
             transferring_worker_time_remaining = complete_worker_times_remaining[transferring_worker]
             rides_to_transfer = [ride for ride in complete_assignment if complete_assignment[ride] == transferring_worker]
             random.shuffle(rides_to_transfer)
@@ -53,7 +61,7 @@ def generate_random_assignment(worker_time: int, ride_times: Dict[str, int], can
                 accepting_workers = filter(lambda worker: worker != transferring_worker and ride in can_check[worker], can_check.keys())
                 for accepting_worker in accepting_workers:
                     accepting_worker_time_remaining = complete_worker_times_remaining[accepting_worker]
-                    if accepting_worker_time_remaining > transferring_worker_time_remaining and abs(accepting_worker_time_remaining - transferring_worker_time_remaining - 2 * ride_time) < abs(accepting_worker_time_remaining - transferring_worker_time_remaining):
+                    if should_transfer(accepting_worker_time_remaining, transferring_worker_time_remaining, ride_time):
                         return ride, accepting_worker
             return None
         transferring_workers = list(can_check.keys()) # All workers.
@@ -69,7 +77,7 @@ def generate_random_assignment(worker_time: int, ride_times: Dict[str, int], can
                 return True
         return False
 
-    while hillclimb(complete_assignment, complete_worker_times_remaining):
+    while hillclimb(complete_assignment, complete_worker_times_remaining): # Hillclimb until local optimum.
         pass
     return complete_assignment, complete_worker_times_remaining
 
