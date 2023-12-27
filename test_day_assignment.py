@@ -1,6 +1,6 @@
 from typing import Dict, List, Tuple, Set, Iterable, Callable
 import pytest
-from discrete_hillclimb import generate_random_assignment
+from day_assignment import generate_random_assignment
 
 
 def is_valid_assignment(assignment: Dict[str, str], worker_time: int, ride_times: Dict[str, int], can_check: Dict[str, Set[str]]) -> bool:

@@ -1,0 +1,39 @@
+# day of the week:
+#   time: minutes available for ridechecks that day (0 means playland is closed that day)
+#   unavail_workers: [worker name 1, worker name 2...] (which workers cannot come in that day)
+#   unavail_rides: [ride name 1, ride name 2...] (which rides are closed that day)
+
+mon:
+    time: 10,
+    unavail_workers: [jason, bob],
+    unavail_rides: []
+
+tue:
+    time: 0,
+    unavail_workers: [],
+    unavail_rides: [wooden]
+
+wed:
+    time: 15,
+    unavail_workers: [],
+    unavail_rides: []
+
+thu:
+    time: 15,
+    unavail_workers: [],
+    unavail_rides: []
+
+fri:
+    time: 15,
+    unavail_workers: [],
+    unavail_rides: []
+
+sat:
+    time: 15,
+    unavail_workers: [],
+    unavail_rides: [skychair]
+
+sun:
+    time: 15,
+    unavail_workers: [],
+    unavail_rides: []
