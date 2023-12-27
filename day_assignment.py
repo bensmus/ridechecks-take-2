@@ -2,6 +2,10 @@ from typing import Dict, List, Tuple, Set, Iterable, Callable
 import random
 
 
+class NoAssignmentError(Exception):
+    pass
+
+
 def generate_day_assignment(worker_time: int, ride_times: Dict[str, int], can_check: Dict[str, Set[str]]) -> Dict[str, str]:
     """
     Find a complete assignment using dfs (backtracking), then improve the complete assignment using hillclimbing.
@@ -32,10 +36,11 @@ def generate_day_assignment(worker_time: int, ride_times: Dict[str, int], can_ch
         # Could not find a complete assignment based on the partial_assignment and worker_times_remaining.
         return {}, partial_worker_times_remaining
     
+
     complete_assignment, complete_worker_times_remaining = dfs({}, {worker: worker_time for worker in can_check})
     if complete_assignment == {}:
-        raise Exception("No assignment exists, problem is overconstrained.")
-    
+        raise NoAssignmentError(f"No assignment exists for worker_time={worker_time}, ride_times={ride_times}, can_check={can_check}")
+
     def hillclimb(complete_assignment: Dict[str, str], complete_worker_times_remaining: Dict[str, int]) -> bool:
         """
         Try to hillclimb (improve the assignment). Randomized to find different local optimums.

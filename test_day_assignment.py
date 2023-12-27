@@ -20,23 +20,16 @@ def is_valid_assignment(assignment: Dict[str, str], worker_time: int, ride_times
     
 
 def test_generate_day_assignment():
-    worker_time = 30
+    worker_time = 20
     ride_times = {
-        'RA': 10, 
-        'RB': 12, 
-        'RC': 14, 
-        'RD': 15, 
-        'RE': 20,
-        'RF': 1,
-        'RG': 4,
-        'RH': 11
+        'wooden': 10,
+        'scary': 1,
+        'slow': 1,
+        'fast': 5
     }
     can_check = {
-        'WA': {'RA', 'RB'},
-        'WB': {'RA', 'RB', 'RC', 'RD', 'RE'},
-        'WC': {'RE', 'RD', 'RA'},
-        'WD': {'RG', 'RF', 'RC'},
-        'WE': {'RH', 'RA', 'RD'}
+        'bob': {'wooden', 'scary', 'slow', 'fast'},
+        'john': {'wooden', 'scary', 'slow', 'fast'},
     }
     assignment = generate_day_assignment(worker_time, ride_times, can_check)
     assert is_valid_assignment(assignment, worker_time, ride_times, can_check)
