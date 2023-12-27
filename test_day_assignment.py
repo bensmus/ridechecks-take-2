@@ -1,6 +1,6 @@
 from typing import Dict, List, Tuple, Set, Iterable, Callable
 import pytest
-from day_assignment import generate_random_assignment
+from day_assignment import generate_day_assignment
 
 
 def is_valid_assignment(assignment: Dict[str, str], worker_time: int, ride_times: Dict[str, int], can_check: Dict[str, Set[str]]) -> bool:
@@ -19,7 +19,7 @@ def is_valid_assignment(assignment: Dict[str, str], worker_time: int, ride_times
     return True
     
 
-def test_generate_random_assignment():
+def test_generate_day_assignment():
     worker_time = 30
     ride_times = {
         'RA': 10, 
@@ -38,7 +38,7 @@ def test_generate_random_assignment():
         'WD': {'RG', 'RF', 'RC'},
         'WE': {'RH', 'RA', 'RD'}
     }
-    assignment, _ = generate_random_assignment(worker_time, ride_times, can_check)
+    assignment, _ = generate_day_assignment(worker_time, ride_times, can_check)
     assert is_valid_assignment(assignment, worker_time, ride_times, can_check)
 
 

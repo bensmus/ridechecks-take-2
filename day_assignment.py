@@ -2,7 +2,7 @@ from typing import Dict, List, Tuple, Set, Iterable, Callable
 import random
 
 
-def generate_random_assignment(worker_time: int, ride_times: Dict[str, int], can_check: Dict[str, Set[str]]) -> Tuple[Dict[str, str], Dict[str, int]]:
+def generate_day_assignment(worker_time: int, ride_times: Dict[str, int], can_check: Dict[str, Set[str]]) -> Tuple[Dict[str, str], Dict[str, int]]:
     """
     Find a complete assignment using dfs (backtracking), then improve the complete assignment using hillclimbing.
     Returns a random locally optimal assignment {ride: worker...} and the remaining times of the workers {worker: time...}.
