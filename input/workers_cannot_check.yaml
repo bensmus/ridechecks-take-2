@@ -1,8 +1,8 @@
-# Explanation:
+# ~Explanation~
 # All of the workers and what rides they cannot check.
 
-# Format: 
-# workername: [ride1, ride2, ..., rideN]
+# ~Format~
+# worker: [ride1, ride2, ..., rideN]
 
 john: [wooden, red]
 bob: [screamers]

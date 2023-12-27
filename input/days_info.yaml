@@ -1,8 +1,8 @@
-# Explanation:
+# ~Explanation~
 # For each day of the week, specify the time available for workers to compete their ridechecks and
 # the workers and rides that are unavailable on the day. A time of 0 means that playland is closed on that day.
 
-# Format:
+# ~Format~
 # day:
 #   time: number
 #   unavail_workers: [worker1, worker2, ..., workerM]

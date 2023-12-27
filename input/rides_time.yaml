@@ -1,8 +1,8 @@
-# Explanation:
+# ~Explanation~
 # All of the rides and how long it takes to check them.
 
-# Format:
-# ridename: ridetime
+# ~Format~
+# ride: ridetime
 
 wooden: 10
 metal: 13
