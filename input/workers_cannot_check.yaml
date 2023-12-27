@@ -1,4 +1,8 @@
-# worker name: [ride that they cannot check 1, ride that they cannot check 2...]
+# Explanation:
+# All of the workers and what rides they cannot check.
 
-john smith: [wooden, red devil]
+# Format: 
+# workername: [ride1, ride2, ..., rideN]
+
+john: [wooden, red]
 bob: [screamers]

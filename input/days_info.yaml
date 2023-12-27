@@ -1,11 +1,16 @@
-# day of the week:
-#   time: minutes available for ridechecks that day (0 means playland is closed that day)
-#   unavail_workers: [worker name 1, worker name 2...] (which workers cannot come in that day)
-#   unavail_rides: [ride name 1, ride name 2...] (which rides are closed that day)
+# Explanation:
+# For each day of the week, specify the time available for workers to compete their ridechecks and
+# the workers and rides that are unavailable on the day. A time of 0 means that playland is closed on that day.
+
+# Format:
+# day:
+#   time: number
+#   unavail_workers: [worker1, worker2, ..., workerM]
+#   unavail_rides: [ride1, ride2, ..., rideN]
 
 mon:
     time: 10,
-    unavail_workers: [jason, bob],
+    unavail_workers: [john, bob],
     unavail_rides: []
 
 tue:
@@ -31,7 +36,7 @@ fri:
 sat:
     time: 15,
     unavail_workers: [],
-    unavail_rides: [skychair]
+    unavail_rides: [red]
 
 sun:
     time: 15,

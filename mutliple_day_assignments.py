@@ -11,14 +11,14 @@ def without_keys[T](d: Dict[T, Any], keys_to_exclude: Collection[T]) -> Dict[T, 
 
 
 def generate_multiple_day_assignments(
-        week_info: Dict[Day, DayInfo], 
-        all_ride_times: Dict[str, int], 
-        all_can_check: Dict[str, Set[str]]) -> Dict[Day, Dict[str, str]]:
+        days_info: Dict[Day, DayInfo], 
+        all_rides_time: Dict[str, int], 
+        all_workers_can_check: Dict[str, Set[str]]) -> Dict[Day, Dict[str, str]]:
     multiple_day_assignments: Dict[Day, Dict[str, str]] = {}
-    for day, day_info in week_info.items():
+    for day, day_info in days_info.items():
         worker_time: int = day_info['time']
-        day_ride_times = without_keys(all_ride_times, day_info['unavail_rides'])
-        day_can_check = without_keys(all_can_check, day_info['unavail_workers'])
+        day_ride_times = without_keys(all_rides_time, day_info['unavail_rides'])
+        day_can_check = without_keys(all_workers_can_check, day_info['unavail_workers'])
         day_assignment = generate_day_assignment(worker_time, day_ride_times, day_can_check)
         multiple_day_assignments[day] = day_assignment
     return multiple_day_assignments
