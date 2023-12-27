@@ -38,7 +38,7 @@ def test_generate_day_assignment():
         'WD': {'RG', 'RF', 'RC'},
         'WE': {'RH', 'RA', 'RD'}
     }
-    assignment, _ = generate_day_assignment(worker_time, ride_times, can_check)
+    assignment = generate_day_assignment(worker_time, ride_times, can_check)
     assert is_valid_assignment(assignment, worker_time, ride_times, can_check)
 
 
