@@ -1,10 +1,9 @@
-# Read files in input folder, generate multiple_day_assignments, and write ridechecks_<day>_<month>_<year> YAML and PDF files to output folder.
+# Read files in input folder, generate multiple_day_assignments, and write ridechecks_<day>_<month>_<year> YAML and HTML files to output folder.
 
 from multiple_day_assignments import generate_multiple_day_assignments, Day, DayInfo
 from day_assignment import NoDayAssignment
 from util import is_list_of_strings, without_keys
-from typing import Dict, List, Tuple, Set, Iterable, Callable, Collection, Any
-
+from typing import Dict, List, Tuple, Set, Iterable, Callable, Collection, Any, get_args
 import os
 import yaml
 
@@ -100,8 +99,12 @@ try:
 except NoDayAssignment as e:
     early_exit(str(e))
 
-# Write assignments to yaml file.
+# Write assignments to YAML file.
+
 with open('output/ridechecks.yaml', 'w') as f:
     yaml.safe_dump(multiple_day_assignments, f, sort_keys=False) # type: ignore
     
-# Write assignments to pdf file using jinja.
+# Write assignments to HTML file using jinja.
+
+days = get_args(Day)
+print(days)

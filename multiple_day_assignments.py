@@ -1,8 +1,7 @@
 from typing import Dict, List, Tuple, Set, Iterable, Collection, Callable, Any, Literal
 from day_assignment import generate_day_assignment, NoDayAssignment
-from util import without_keys
+from util import without_keys, Day
 
-Day = Literal['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
 DayInfoKey = Literal['time', 'unavail_workers', 'unavail_rides']
 DayInfo = Dict[DayInfoKey, Any]
 
