@@ -1,13 +1,10 @@
 from typing import Dict, List, Tuple, Set, Iterable, Collection, Callable, Any, Literal
 from day_assignment import generate_day_assignment
+from util import without_keys
 
 Day = Literal['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
 DayInfoKey = Literal['time', 'unavail_workers', 'unavail_rides']
 DayInfo = Dict[DayInfoKey, Any]
-
-
-def without_keys[T](d: Dict[T, Any], keys_to_exclude: Collection[T]) -> Dict[T, Any]:
-    return {k: v for k, v in d.items() if k not in keys_to_exclude}
 
 
 def generate_multiple_day_assignments(

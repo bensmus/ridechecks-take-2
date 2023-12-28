@@ -3,6 +3,9 @@
 
 # ~Format~
 # worker: [ride1, ride2, ..., rideN]
+# ...
 
-john: [wooden, red]
-bob: [screamers]
+john: [wooden]
+bob: [metal]
+richard: [wooden]
+josh: []

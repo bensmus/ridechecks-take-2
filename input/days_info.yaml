@@ -3,42 +3,48 @@
 # the workers and rides that are unavailable on the day. A time of 0 means that playland is closed on that day.
 
 # ~Format~
-# day:
+# mon:
 #   time: number
 #   unavail_workers: [worker1, worker2, ..., workerM]
 #   unavail_rides: [ride1, ride2, ..., rideN]
+#
+# tue:
+#   time: number
+#   unavail_workers: [worker1, worker2, ..., workerM]
+#   unavail_rides: [ride1, ride2, ..., rideN]
+# ...
 
 mon:
-    time: 10,
-    unavail_workers: [john, bob],
+    time: 10
+    unavail_workers: [john, bob]
     unavail_rides: []
 
 tue:
-    time: 0,
-    unavail_workers: [],
+    time: 0
+    unavail_workers: []
     unavail_rides: [wooden]
 
 wed:
-    time: 15,
-    unavail_workers: [],
+    time: 15
+    unavail_workers: [bob]
     unavail_rides: []
 
 thu:
-    time: 15,
-    unavail_workers: [],
-    unavail_rides: []
+    time: 15
+    unavail_workers: []
+    unavail_rides: [metal]
 
 fri:
-    time: 15,
-    unavail_workers: [],
+    time: 15
+    unavail_workers: []
     unavail_rides: []
 
 sat:
-    time: 15,
-    unavail_workers: [],
+    time: 15
+    unavail_workers: []
     unavail_rides: [red]
 
 sun:
-    time: 15,
-    unavail_workers: [],
+    time: 15
+    unavail_workers: []
     unavail_rides: []
