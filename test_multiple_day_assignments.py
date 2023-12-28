@@ -1,5 +1,5 @@
 from typing import Dict
-from mutliple_day_assignments import generate_multiple_day_assignments, without_keys, Day, DayInfo 
+from multiple_day_assignments import generate_multiple_day_assignments, without_keys, Day, DayInfo 
 from test_day_assignment import is_valid_assignment
 
 

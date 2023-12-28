@@ -1,6 +1,6 @@
 # Read files in input folder, generate multiple_day_assignments, and write ridechecks_<day>_<month>_<year> YAML and PDF files to output folder.
 
-from mutliple_day_assignments import generate_multiple_day_assignments, Day, DayInfo # FIXME SPELLING
+from multiple_day_assignments import generate_multiple_day_assignments, Day, DayInfo # FIXME SPELLING
 from day_assignment import NoAssignmentError
 from util import is_list_of_strings, without_keys
 from typing import Dict, List, Tuple, Set, Iterable, Callable, Collection, Any
@@ -13,7 +13,7 @@ def early_exit(s: str):
     """
     Exit before generating files because conditions for generating files are not met.
     """
-    print(f"NO PDF GENERATED: {s}.")
+    print(f"PDF NOT GENERATED: {s}.")
     exit()
 
 
