@@ -2,7 +2,7 @@ from typing import Dict, List, Tuple, Set, Iterable, Callable
 import random
 
 
-class NoAssignmentError(Exception):
+class NoDayAssignment(Exception):
     pass
 
 
@@ -39,7 +39,7 @@ def generate_day_assignment(worker_time: int, rides_time: Dict[str, int], worker
 
     complete_assignment, complete_worker_times_remaining = dfs({}, {worker: worker_time for worker in workers_can_check})
     if complete_assignment == {}:
-        raise NoAssignmentError(f"No assignment exists for worker_time={worker_time}, ride_times={rides_time}, can_check={workers_can_check}")
+        raise NoDayAssignment(f"No assignment exists for worker_time={worker_time}, ride_times={rides_time}, can_check={workers_can_check}")
 
     def hillclimb(complete_assignment: Dict[str, str], complete_worker_times_remaining: Dict[str, int]) -> bool:
         """

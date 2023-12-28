@@ -1,5 +1,5 @@
 # ~Explanation~
-# All of the workers and what rides they cannot check.
+# All of the workers and what rides they cannot check (have not been trained on them).
 
 # ~Format~
 # worker: [ride1, ride2, ..., rideN]
@@ -8,4 +8,8 @@
 john: [wooden]
 bob: [metal]
 richard: [wooden]
-josh: []
+josh: [slow]
+power: []
+light: [fast]
+dark: [slow]
+collin: [scary]

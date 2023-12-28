@@ -25,26 +25,26 @@ tue:
     unavail_rides: [wooden]
 
 wed:
-    time: 15
+    time: 30
     unavail_workers: [bob]
     unavail_rides: []
 
 thu:
-    time: 15
+    time: 30
     unavail_workers: []
     unavail_rides: [metal]
 
 fri:
-    time: 15
+    time: 30
     unavail_workers: []
     unavail_rides: []
 
 sat:
-    time: 15
+    time: 30
     unavail_workers: []
     unavail_rides: [red]
 
 sun:
-    time: 15
+    time: 30
     unavail_workers: []
     unavail_rides: []

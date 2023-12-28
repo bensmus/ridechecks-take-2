@@ -1,7 +1,7 @@
 # Read files in input folder, generate multiple_day_assignments, and write ridechecks_<day>_<month>_<year> YAML and PDF files to output folder.
 
-from multiple_day_assignments import generate_multiple_day_assignments, Day, DayInfo # FIXME SPELLING
-from day_assignment import NoAssignmentError
+from multiple_day_assignments import generate_multiple_day_assignments, Day, DayInfo
+from day_assignment import NoDayAssignment
 from util import is_list_of_strings, without_keys
 from typing import Dict, List, Tuple, Set, Iterable, Callable, Collection, Any
 
@@ -98,8 +98,8 @@ days_info = {day: day_info for day, day_info in days_info.items() if day_info['t
 try:
     multiple_day_assignments = generate_multiple_day_assignments(days_info, all_rides_time, all_workers_can_check)
     print(multiple_day_assignments)
-except NoAssignmentError as e:
-    early_exit(str(e)) # FIXME tell what day! Rework errors.
+except NoDayAssignment as e:
+    early_exit(str(e))
 
 # Write assignments to yaml file.
 # assignments_to_yaml(assignments)
