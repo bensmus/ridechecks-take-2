@@ -15,36 +15,30 @@
 # ...
 
 mon:
-    time: 10
-    unavail_workers: [john, bob]
-    unavail_rides: []
-
+  time: 30
+  unavail_workers: [john, bob]
+  unavail_rides: []
 tue:
-    time: 0
-    unavail_workers: []
-    unavail_rides: [wooden]
-
+  time: 0
+  unavail_workers: []
+  unavail_rides: [wooden]
 wed:
-    time: 30
-    unavail_workers: [bob]
-    unavail_rides: []
-
+  time: 30
+  unavail_workers: [bob]
+  unavail_rides: []
 thu:
-    time: 30
-    unavail_workers: []
-    unavail_rides: [metal]
-
+  time: 30
+  unavail_workers: []
+  unavail_rides: [metal]
 fri:
-    time: 30
-    unavail_workers: []
-    unavail_rides: []
-
+  time: 30
+  unavail_workers: []
+  unavail_rides: []
 sat:
-    time: 30
-    unavail_workers: []
-    unavail_rides: [red]
-
+  time: 30
+  unavail_workers: []
+  unavail_rides: [red]
 sun:
-    time: 30
-    unavail_workers: []
-    unavail_rides: []
+  time: 30
+  unavail_workers: []
+  unavail_rides: []

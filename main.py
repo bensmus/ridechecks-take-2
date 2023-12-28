@@ -97,12 +97,11 @@ days_info = {day: day_info for day, day_info in days_info.items() if day_info['t
 
 try:
     multiple_day_assignments = generate_multiple_day_assignments(days_info, all_rides_time, all_workers_can_check)
-    print(multiple_day_assignments)
 except NoDayAssignment as e:
     early_exit(str(e))
 
 # Write assignments to yaml file.
-# assignments_to_yaml(assignments)
+with open('output/ridechecks.yaml', 'w') as f:
+    yaml.safe_dump(multiple_day_assignments, f, sort_keys=False) # type: ignore
     
 # Write assignments to pdf file using jinja.
-# assignments_to_pdf(assignments)
