@@ -2,8 +2,9 @@
 
 from multiple_day_assignments import generate_multiple_day_assignments, Day, DayInfo
 from day_assignment import NoDayAssignment
+from make_html_table import make_html_table
 from util import is_list_of_strings, without_keys
-from typing import Dict, List, Tuple, Set, Iterable, Callable, Collection, Any, get_args
+from typing import Dict, List, Tuple, Set, Iterable, Callable, Collection, Any
 import os
 import yaml
 
@@ -106,5 +107,4 @@ with open('output/ridechecks.yaml', 'w') as f:
     
 # Write assignments to HTML file using jinja.
 
-days = get_args(Day)
-print(days)
+make_html_table(multiple_day_assignments, 'output/ridechecks.html') # type: ignore
