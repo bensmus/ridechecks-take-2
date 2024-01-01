@@ -22,8 +22,7 @@ Path of the user (99% of time):
 (in GUI)
 
 - Edit days_info
-	- Days open
-	- Day time
+	- Days open/time:
     ---> days_info: (Mon, 10 {-}), (Tue, 10 {-}), (Thu, 10 {-})
     ---> Add day: Two inputs
     - For each day e.g. <- Mon ->
