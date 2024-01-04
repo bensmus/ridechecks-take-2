@@ -60,7 +60,7 @@ for day, day_info in days_info.items():
         early_exit("Data in 'days_info.yaml' does not follow format")
     
     for key, value in day_info.items():
-        if key not in ['time', 'unavail_workers', 'unavail_rides']:
+        if key not in ['time', 'uaworkers', 'uarides']:
             early_exit("Data in 'days_info.yaml' does not follow format")
     
         if type(value) != int and not is_list_of_strings(value):
@@ -69,15 +69,15 @@ for day, day_info in days_info.items():
         if key == 'time' and type(value) != int:
             early_exit("Data in 'days_info.yaml' does not follow format, time must be a number")
     
-        if (key == 'unavail_rides' or key == 'unavail_workers') and type(value) != list:
+        if (key == 'uarides' or key == 'uaworkers') and type(value) != list:
             early_exit("Data in 'days_info.yaml' does not follow format, expected a list of unavailable workers or unavailable rides")
     
-        if key == 'unavail_rides':
+        if key == 'uarides':
             for ride in value: # type: ignore
                 if ride not in all_rides_time:
                     early_exit(f"Unavailable ride '{ride}' listed in 'days_info.yaml' for day '{day}' does not appear in 'rides_time.yaml', check ride name")
         
-        if key == 'unavail_workers':
+        if key == 'uaworkers':
             for worker in value: # type: ignore
                 if worker not in all_workers_cannot_check:
                     early_exit(f"Unavailable worker '{worker}' listed in 'days_info.yaml' for day '{day}' does not appear in 'workers_cannot_check.yaml', check worker name")
@@ -106,5 +106,7 @@ with open('output/ridechecks.yaml', 'w') as f:
     yaml.safe_dump(multiple_day_assignments, f, sort_keys=False) # type: ignore
     
 # Write assignments to HTML file using jinja.
+
+breakpoint()
 
 make_html_table(multiple_day_assignments, 'output/ridechecks.html') # type: ignore

@@ -4,8 +4,7 @@ fri:
   uaworkers: []
 mon:
   time: 0
-  uarides:
-  - coooo
+  uarides: []
   uaworkers:
   - john
   - bob

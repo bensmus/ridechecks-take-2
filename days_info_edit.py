@@ -1,4 +1,4 @@
-# GUI for setting rides and workers unavailable on a certain day.
+# GUI for editing days_info.yaml.
 
 import yaml
 from PySide6.QtGui import Qt
