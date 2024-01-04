@@ -14,13 +14,13 @@ def test_generate_multiple_day_assignments():
     week_info: Dict[Day, DayInfo] = {
         'mon': {
             'time': 10,
-            'unavail_workers': [],
-            'unavail_rides': []
+            'uaworkers': [],
+            'uarides': []
         },
         'wed': {
             'time': 20,
-            'unavail_workers': [],
-            'unavail_rides': []
+            'uaworkers': [],
+            'uarides': []
         }
     }
     all_ride_times = {
@@ -36,5 +36,5 @@ def test_generate_multiple_day_assignments():
     assignments = generate_multiple_day_assignments(week_info, all_ride_times, all_can_check)
     assert 'mon' in assignments
     assert 'wed' in assignments
-    assert is_valid_assignment(assignments['mon'], week_info['mon']['time'], without_keys(all_ride_times, week_info['mon']['unavail_rides']), without_keys(all_can_check, week_info['mon']['unavail_workers']))
-    assert is_valid_assignment(assignments['wed'], week_info['wed']['time'], without_keys(all_ride_times, week_info['wed']['unavail_rides']), without_keys(all_can_check, week_info['wed']['unavail_workers']))
+    assert is_valid_assignment(assignments['mon'], week_info['mon']['time'], without_keys(all_ride_times, week_info['mon']['uarides']), without_keys(all_can_check, week_info['mon']['uaworkers']))
+    assert is_valid_assignment(assignments['wed'], week_info['wed']['time'], without_keys(all_ride_times, week_info['wed']['uarides']), without_keys(all_can_check, week_info['wed']['uaworkers']))
