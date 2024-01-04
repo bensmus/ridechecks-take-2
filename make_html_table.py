@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple, Set, Iterable, Callable, Collection, Any, get_args
+from typing import Dict, List, Tuple, Set, Iterable, Callable, Collection, Any
 from multiple_day_assignments import Day, DayInfo
 import jinja2
 

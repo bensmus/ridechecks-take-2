@@ -190,7 +190,7 @@ class yamlLoadDump(QMainWindow):
 
     def closeEvent(self, event):
         with open("input/days_info.yaml", "w") as f:
-            yaml.safe_dump(self.days_widget.read_days(), f)
+            yaml.safe_dump(self.days_widget.read_days(), f, sort_keys=False)
 
 
 window = yamlLoadDump()

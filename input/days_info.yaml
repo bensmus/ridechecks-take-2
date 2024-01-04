@@ -1,35 +1,36 @@
-fri:
-  time: 30
-  uarides: []
-  uaworkers: []
 mon:
-  time: 30
-  uarides: []
+  time: 43
   uaworkers:
   - john
   - bob
-sat:
-  time: 30
   uarides:
-  - red
-  uaworkers: []
-sun:
-  time: 30
-  uarides: []
-  uaworkers: []
-thu:
-  time: 30
-  uarides:
-  - metal
-  uaworkers: []
+  - sdf
 tue:
   time: 0
+  uaworkers: []
   uarides:
   - wooden
-  uaworkers: []
 wed:
   time: 213
-  uarides:
-  - red
   uaworkers:
   - bob
+  uarides:
+  - red
+thu:
+  time: 30
+  uaworkers: []
+  uarides:
+  - metal
+fri:
+  time: 30
+  uaworkers: []
+  uarides: []
+sat:
+  time: 30
+  uaworkers: []
+  uarides:
+  - red
+sun:
+  time: 30
+  uaworkers: []
+  uarides: []

@@ -89,10 +89,6 @@ for worker in all_workers_cannot_check:
     cannot_check = all_workers_cannot_check[worker]
     all_workers_can_check[worker] = set(all_rides_time.keys()) - set(cannot_check)
 
-# Ignore days when time is 0 (playland is closed).
-
-days_info = {day: day_info for day, day_info in days_info.items() if day_info['time'] != 0}
-
 # Generate assignments, handling case where assignments cannot be generated.
 
 try:
@@ -106,7 +102,5 @@ with open('output/ridechecks.yaml', 'w') as f:
     yaml.safe_dump(multiple_day_assignments, f, sort_keys=False) # type: ignore
     
 # Write assignments to HTML file using jinja.
-
-breakpoint()
 
 make_html_table(multiple_day_assignments, 'output/ridechecks.html') # type: ignore
