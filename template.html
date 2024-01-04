@@ -1,17 +1,1 @@
-<table>
-    <thead>
-    {% for day in ridechecks %}
-        <th>{{ day }}</th>
-    {% endfor %}
-    </thead>
-    <tbody>
-    {% for ride in rides %}
-        <tr>
-        {% for day in days %}
-            <td>
-                {{ ridechecks[day][ride] }}
-            </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+{{ multiple_day_assignments }}

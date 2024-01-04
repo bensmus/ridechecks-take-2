@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple, Set, Iterable, Collection, Callable, Any, Literal
+from typing import Dict, List, Tuple, Set, Iterable, Collection, Callable, Any, Literal, get_args
 from day_assignment import generate_day_assignment, NoDayAssignment
 from util import without_keys, Day
 
@@ -10,7 +10,8 @@ def generate_multiple_day_assignments(
         all_rides_time: Dict[str, int], 
         all_workers_can_check: Dict[str, Set[str]]) -> Dict[Day, Dict[str, str]]:
     multiple_day_assignments: Dict[Day, Dict[str, str]] = {}
-    for day, day_info in days_info.items():
+    for day in get_args(Day):
+        day_info = days_info[day]
         worker_time: int = day_info['time']
         day_ride_times = without_keys(all_rides_time, day_info['uarides'])
         day_can_check = without_keys(all_workers_can_check, day_info['uaworkers'])

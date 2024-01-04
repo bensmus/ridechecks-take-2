@@ -15,7 +15,8 @@ from PySide6.QtWidgets import (
     QTabWidget,
     QMainWindow,
 )
-
+from util import Day
+from typing import get_args
 from PySide6.QtCore import Signal
 
 # Standard
@@ -161,12 +162,11 @@ class DayWidget(QWidget):
 
 
 class DaysWidget(QWidget):
-    days_of_week = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
     def __init__(self, parent, days_data):
         super().__init__(parent)
         self.day_widgets = {}
         tab_widget = QTabWidget(self)
-        for day in DaysWidget.days_of_week:
+        for day in get_args(Day):
             day_widget = DayWidget(self, days_data[day])
             self.day_widgets[day] = day_widget
             tab_widget.addTab(day_widget, day.capitalize())
