@@ -103,4 +103,4 @@ with open('output/ridechecks.yaml', 'w') as f:
     
 # Write assignments to HTML file using jinja.
 
-make_html_table(multiple_day_assignments, 'output/ridechecks.html') # type: ignore
+make_html_table(multiple_day_assignments, list(all_rides_time.keys()), 'output/ridechecks.html') # type: ignore

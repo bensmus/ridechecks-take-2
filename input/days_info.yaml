@@ -3,8 +3,7 @@ mon:
   uaworkers:
   - john
   - bob
-  uarides:
-  - sdf
+  uarides: []
 tue:
   time: 0
   uaworkers: []
