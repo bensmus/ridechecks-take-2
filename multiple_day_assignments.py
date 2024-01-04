@@ -10,7 +10,9 @@ def generate_multiple_day_assignments(
         all_rides_time: Dict[str, int], 
         all_workers_can_check: Dict[str, Set[str]]) -> Dict[Day, Dict[str, str]]:
     multiple_day_assignments: Dict[Day, Dict[str, str]] = {}
-    for day in get_args(Day):
+    for day in get_args(Day): # Looping through those and not days_info keys to preserve order
+        if day not in days_info: # Playland closed on that day
+            continue
         day_info = days_info[day]
         worker_time: int = day_info['time']
         day_ride_times = without_keys(all_rides_time, day_info['uarides'])

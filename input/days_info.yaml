@@ -3,7 +3,7 @@ fri:
   uarides: []
   uaworkers: []
 mon:
-  time: 0
+  time: 30
   uarides: []
   uaworkers:
   - john
@@ -28,7 +28,8 @@ tue:
   - wooden
   uaworkers: []
 wed:
-  time: 30
-  uarides: []
+  time: 213
+  uarides:
+  - red
   uaworkers:
   - bob
