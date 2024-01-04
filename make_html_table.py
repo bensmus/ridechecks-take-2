@@ -11,6 +11,5 @@ def make_html_table(multiple_day_assignments: Dict[Day, Dict[str, str]], rides: 
         'multiple_day_assignments': multiple_day_assignments,
         'rides': rides
     })
-    html_path = "output/ridechecks.html"
     with open(html_path, 'w') as f:
         f.write(output_text)
