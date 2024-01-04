@@ -1,44 +1,35 @@
-# ~Explanation~
-# For each day of the week, specify the time available for workers to compete their ridechecks and
-# the workers and rides that are unavailable on the day. A time of 0 means that playland is closed on that day.
-
-# ~Format~
-# mon:
-#   time: number
-#   unavail_workers: [worker1, worker2, ..., workerM]
-#   unavail_rides: [ride1, ride2, ..., rideN]
-#
-# tue:
-#   time: number
-#   unavail_workers: [worker1, worker2, ..., workerM]
-#   unavail_rides: [ride1, ride2, ..., rideN]
-# ...
-
-mon:
-  time: 30
-  unavail_workers: [john, bob]
-  unavail_rides: []
-tue:
-  time: 0
-  unavail_workers: []
-  unavail_rides: [wooden]
-wed:
-  time: 30
-  unavail_workers: [bob]
-  unavail_rides: []
-thu:
-  time: 30
-  unavail_workers: []
-  unavail_rides: [metal]
 fri:
   time: 30
-  unavail_workers: []
-  unavail_rides: []
+  uarides: []
+  uaworkers: []
+mon:
+  time: 0
+  uarides:
+  - coooo
+  uaworkers:
+  - john
+  - bob
 sat:
   time: 30
-  unavail_workers: []
-  unavail_rides: [red]
+  uarides:
+  - red
+  uaworkers: []
 sun:
   time: 30
-  unavail_workers: []
-  unavail_rides: []
+  uarides: []
+  uaworkers: []
+thu:
+  time: 30
+  uarides:
+  - metal
+  uaworkers: []
+tue:
+  time: 0
+  uarides:
+  - wooden
+  uaworkers: []
+wed:
+  time: 30
+  uarides: []
+  uaworkers:
+  - bob
