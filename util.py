@@ -13,8 +13,7 @@ def is_list_of_strings(l: Any):
 def timestamp_string():
     now = datetime.now()
     months = calendar.month_abbr
-    days = calendar.day_abbr
-    timestamp = f'{now.year}_{months[now.month]}_{days[now.day]}_{now.hour}:{now.minute}:{now.second}'
+    timestamp = f'{now.year}_{months[now.month]}_{now.day}_{now.hour}h{now.minute}m{now.second}s'
     return timestamp
 
 Day = Literal['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
