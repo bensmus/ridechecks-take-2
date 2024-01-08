@@ -1,9 +1,17 @@
 mon:
   time: 43
-  uaworkers: []
+  uaworkers:
+  - john
+  - bob
+  - richard
+  - josh
+  - collin
   uarides:
+  - red
+  - green
   - wooden
-  - metal
+  - fast
+  - scary
 tue:
   time: 0
   uaworkers: []

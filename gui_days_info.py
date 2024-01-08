@@ -23,7 +23,7 @@ from PySide6.QtCore import Signal
 # Standard
 app = QApplication([])
 
-# TODO Add comments and fix atrocious variable names, use Dropdown class
+# TODO Add comments and fix atrocious variable names
 
 
 class SingleElementWidget(QWidget):
@@ -66,8 +66,9 @@ class Dropdown(QWidget):
             self.add_elem(elem)
         
         layout = QVBoxLayout(self)
-        layout.add(label)
-        layout.add(self.combo_box)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.addWidget(label)
+        layout.addWidget(self.combo_box)
         
     def remove_elem(self, elem: str) -> None:
         for i in range(self.combo_box.count()):
@@ -94,7 +95,7 @@ class ElementSelectorWidget(QWidget):
     possible to select a subset of those rides to be unavailable.
 
     Consists of: 
-    - Dropdown selector
+    - Dropdown
     - Add element button
     - List view of selected elements 
     """
@@ -103,11 +104,7 @@ class ElementSelectorWidget(QWidget):
 
         self.task_widgets = []
 
-        dropdown_label = QLabel(self)
-        dropdown_label.setText(f"{elem_name.capitalize()}...")
-        dropdown = QComboBox(self)
-        for elem in all_elems:
-            dropdown.addItem(elem)
+        dropdown = Dropdown(self, elem_name, all_elems)
 
         task_add_button = QPushButton(self)  # Submit the task
 
@@ -119,7 +116,6 @@ class ElementSelectorWidget(QWidget):
         scroll_area.setWidget(task_holder)
 
         layout = QVBoxLayout(self)  # `self` argument is critical
-        layout.addWidget(dropdown_label)
         layout.addWidget(dropdown)
         layout.addWidget(task_add_button)
         layout.addWidget(scroll_area)  # QScrollArea is a widget
@@ -128,11 +124,7 @@ class ElementSelectorWidget(QWidget):
         task_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         def add_task(task_text):
-            # Ensure that we cannot add the task again: remove it from dropdown
-            for i in range(dropdown.count()):
-                text = dropdown.itemText(i)
-                if text == task_text:
-                    dropdown.removeItem(i)
+            dropdown.remove_elem(task_text)
             task_widget = SingleElementWidget(self, task_text)
             self.task_widgets.append(task_widget)
             task_layout.addWidget(task_widget)
@@ -140,15 +132,15 @@ class ElementSelectorWidget(QWidget):
             def delete_task():
                 self.task_widgets.remove(task_widget)
                 current = task_widget.read_task()
-                dropdown.addItem(current)
+                dropdown.add_elem(current)
                 task_widget.deleteLater()
 
             task_widget.task_deleted.connect(delete_task)
         
         def add_task_from_dropdown():
-            if dropdown.currentIndex() >= 0: # If there is a task to add:
-                current = dropdown.currentText()
-                add_task(current)
+            if dropdown.is_empty():
+                return
+            add_task(dropdown.current_elem())
 
         task_add_button.clicked.connect(add_task_from_dropdown)
 
