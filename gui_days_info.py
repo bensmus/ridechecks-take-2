@@ -128,7 +128,6 @@ class ElementWidget(QWidget):
     """
     Consists of QPushButton for unchoosing element and QLabel
     """
-
     element_unchoose = Signal(bool)
 
     def __init__(self, parent, text):
@@ -185,6 +184,9 @@ class TimeEditWidget(QWidget):
 
 
 class DayWidget(QWidget):
+    """
+    Edit time, unavailable rides, and unavailable workers for a given day.
+    """
     def __init__(self, parent, day_data, rides, workers):
         super().__init__(parent)
 
