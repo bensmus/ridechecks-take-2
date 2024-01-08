@@ -33,7 +33,7 @@ class Dropdown(QWidget):
         super().__init__(parent)
 
         label = QLabel(self)
-        label.setText(f"{elem_name.capitalize()}...")
+        label.setText(f"{elem_name.capitalize()}:")
         self.combo_box = QComboBox(self)
         for elem in elems:
             self.add_elem(elem)
@@ -87,6 +87,7 @@ class ChosenWidget(QWidget):
         scroll_area = QScrollArea(self)
         scroll_area.setWidgetResizable(True) # This is critical, otherwise no elements can be chosen.
         scroll_area.setWidget(chosen_holder)
+        scroll_area.setFrameStyle(0)
 
         layout = QVBoxLayout(self)  # `self` argument is critical
         layout.addWidget(dropdown)
@@ -135,9 +136,7 @@ class ElementWidget(QWidget):
 
         unchoose_button = QPushButton(self)
         unchoose_button.setText("-")
-        unchoose_button.setSizePolicy(
-            QSizePolicy.Fixed, QSizePolicy.Fixed
-        )  # Makes the button small.
+        unchoose_button.setFixedSize(30, 20)
         unchoose_button.clicked.connect(lambda: self.element_unchoose.emit(True))
         self.label = QLabel(self)
         self.label.setText(text)
@@ -159,7 +158,7 @@ class TimeEditWidget(QWidget):
 
         layout = QVBoxLayout(self)
         time_edit_widget = QLineEdit(self)
-        time_edit_widget.setPlaceholderText("Time...")
+        time_edit_widget.setPlaceholderText("Time:")
         time_view_widget = QLabel(self)
 
         layout.addWidget(time_edit_widget)
@@ -216,13 +215,18 @@ class DaysWidget(QWidget):
     def __init__(self, parent, days_data, rides, workers):
         super().__init__(parent)
         self.day_widgets = {}
-        tab_widget = QTabWidget(self)
+        layout = QHBoxLayout(self)
         for day in get_args(Day):
-            day_widget = DayWidget(self, days_data[day], rides, workers)
+            container = QWidget(self)
+            container_layout = QVBoxLayout(container)
+            day_label = QLabel(container)
+            day_label.setText(day.capitalize())
+            day_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            day_widget = DayWidget(container, days_data[day], rides, workers)
             self.day_widgets[day] = day_widget
-            tab_widget.addTab(day_widget, day.capitalize())
-        layout = QVBoxLayout(self)  # Could have been QHBoxLayout, it doesn't matter.
-        layout.addWidget(tab_widget)
+            container_layout.addWidget(day_label)
+            container_layout.addWidget(day_widget)
+            layout.addWidget(container)
 
     def read_days(self):
         return {
