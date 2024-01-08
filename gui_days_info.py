@@ -23,10 +23,12 @@ from PySide6.QtCore import Signal
 # Standard
 app = QApplication([])
 
-# TODO Add comments and fix atrocious variable names
-
 
 class Dropdown(QWidget):
+    """
+    Consists of Qlabel and QComboBox.
+    For choosing from a list of unique strings.
+    """
     def __init__(self, parent, elem_name: str, elems: List[str]):
         super().__init__(parent)
 
@@ -77,13 +79,13 @@ class ChosenWidget(QWidget):
 
         dropdown = Dropdown(self, elem_name, all_elems)
 
-        add_button = QPushButton(self)  # Submit the task
+        add_button = QPushButton(self)  # Button to choose element.
 
         add_button.setText(f"Add {elem_name}")
 
         chosen_holder = QWidget(self)
         scroll_area = QScrollArea(self)
-        scroll_area.setWidgetResizable(True) # This is critical, otherwise no tasks can be added.
+        scroll_area.setWidgetResizable(True) # This is critical, otherwise no elements can be chosen.
         scroll_area.setWidget(chosen_holder)
 
         layout = QVBoxLayout(self)  # `self` argument is critical
@@ -100,13 +102,13 @@ class ChosenWidget(QWidget):
             self.elem_widgets.append(elem_widget)
             chosen_layout.addWidget(elem_widget)
 
-            def delete_task():
+            def delete_elem():
                 self.elem_widgets.remove(elem_widget)
-                current = elem_widget.read_task()
+                current = elem_widget.read()
                 dropdown.add_elem(current)
                 elem_widget.deleteLater()
 
-            elem_widget.element_unchoose.connect(delete_task)
+            elem_widget.element_unchoose.connect(delete_elem)
         
         def add_elem_from_dropdown():
             if dropdown.is_empty():
@@ -119,18 +121,17 @@ class ChosenWidget(QWidget):
             add_elem(chosen_elem)
 
     def read_chosen(self):
-        return [elem_widget.read_task() for elem_widget in self.elem_widgets]
+        return [elem_widget.read() for elem_widget in self.elem_widgets]
 
 
 class ElementWidget(QWidget):
     """
-    Consists of button for deleting task and
-    label describing task.
+    Consists of QPushButton for unchoosing element and QLabel
     """
 
     element_unchoose = Signal(bool)
 
-    def __init__(self, parent, task_text):
+    def __init__(self, parent, text):
         super().__init__(parent)
 
         unchoose_button = QPushButton(self)
@@ -140,14 +141,14 @@ class ElementWidget(QWidget):
         )  # Makes the button small.
         unchoose_button.clicked.connect(lambda: self.element_unchoose.emit(True))
         self.label = QLabel(self)
-        self.label.setText(task_text)
+        self.label.setText(text)
 
         layout = QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)  # Remove spacing
         layout.addWidget(unchoose_button)
         layout.addWidget(self.label)
 
-    def read_task(self):
+    def read(self):
         return self.label.text()
     
 

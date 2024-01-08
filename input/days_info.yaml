@@ -3,10 +3,10 @@ mon:
   uaworkers:
   - john
   - bob
-  - richard
-  - josh
   - collin
-  uarides: []
+  - josh
+  uarides:
+  - wooden
 tue:
   time: 0
   uaworkers: []
