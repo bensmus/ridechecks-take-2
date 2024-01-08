@@ -11,8 +11,9 @@ from PySide6.QtWidgets import (
     QPushButton,
     QWidget,
     QScrollArea,
-    QMainWindow,
+    QMessageBox,
     QComboBox,
+    QTabWidget,
 )
 from util import Day
 from typing import get_args, List
@@ -235,6 +236,9 @@ class DaysWidget(QWidget):
 class yamlLoadDump(QWidget):
     def __init__(self):
         super().__init__()
+        self.setGeometry(400, 400, 400, 600) # Increase default size and default position on desktop.
+        self.setWindowTitle("Ridechecks App")
+
         # Load YAML and use it to init DaysWidget
         with open("input/days_info.yaml", "r") as f:
             days_info = yaml.safe_load(f)
@@ -242,21 +246,43 @@ class yamlLoadDump(QWidget):
             rides_time = yaml.safe_load(f)
         with open("input/workers_cannot_check.yaml", "r") as f:
             workers_time = yaml.safe_load(f)
+
+        tab_widget = QTabWidget(self)
         rides = list(rides_time.keys())
         workers = list(workers_time.keys())
-        layout = QVBoxLayout(self)
-        days_widget = DaysWidget(self, days_info, rides, workers)
+        self.days_widget = DaysWidget(self, days_info, rides, workers)
+        tab_widget.addTab(self.days_widget, 'Weekly Info')
+        
         save_button = QPushButton(self)
         save_button.setText("SAVE")
-        def save():
-            with open("input/days_info.yaml", "w") as f:
-                yaml.safe_dump(days_widget.read_days(), f, sort_keys=False)
-        save_button.clicked.connect(save)
-        layout.addWidget(days_widget)
+
+        save_button.clicked.connect(self.save)
+        
+        layout = QVBoxLayout(self)
+        layout.addWidget(tab_widget)
         layout.addWidget(save_button)
-        self.setGeometry(400, 400, 400, 600) # Increase default size and default position on desktop.
 
+    def save(self):
+            with open("input/days_info.yaml", "w") as f:
+                yaml.safe_dump(self.days_widget.read_days(), f, sort_keys=False)
+            with open("input/rides_time.yaml", "w") as f:
+                ...
+            with open("input/workers_cannot_check.yaml", "r") as f:
+                ...
+        
+    def closeEvent(self, event):
+        reply = QMessageBox.question(self, 'Save Confirmation', 'Would you like to save before closing?',
+                                     QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.Cancel)
 
+        if reply == QMessageBox.Yes:
+            self.save()
+            event.accept()
+        elif reply == QMessageBox.No:
+            event.accept()
+        else:
+            event.ignore()
+        
+        
 window = yamlLoadDump()
 window.show()
 app.exec()
