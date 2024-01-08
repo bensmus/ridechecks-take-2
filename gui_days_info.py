@@ -233,6 +233,29 @@ class DaysWidget(QWidget):
         }
 
 
+# FIXME Shared state between tabs...
+    
+
+class WorkersWidget(QWidget):
+    """
+    Modify worker permissions using a checkbox grid 
+    and add/remove worker.
+    """
+    def __init__(self, parent, workers_cannot_check, rides):
+        super().__init__()
+        ...
+
+
+class RidesWidget(QWidget):
+    """
+    Modify ride times using a line edit
+    and add/remove rides.
+    """
+    def __init__(self, parent, rides_time):
+        super().__init__()
+        ...
+
+    
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -245,18 +268,20 @@ class MainWindow(QWidget):
         with open("input/rides_time.yaml", "r") as f:
             rides_time = yaml.safe_load(f)
         with open("input/workers_cannot_check.yaml", "r") as f:
-            workers_time = yaml.safe_load(f)
+            workers_cannot_check = yaml.safe_load(f)
 
         tab_widget = QTabWidget(self)
 
-        # Init DaysWidget
         rides = list(rides_time.keys())
-        workers = list(workers_time.keys())
+        workers = list(workers_cannot_check.keys())
         self.days_widget = DaysWidget(self, days_info, rides, workers)
+        self.workers_widget = WorkersWidget(self, workers_cannot_check, rides)
+        self.rides_widget = RidesWidget(self, rides_time)
+
         tab_widget.addTab(self.days_widget, 'Weekly Info')
-        
-        # TODO: Init workers widget and rides widget
-        
+        tab_widget.addTab(self.workers_widget, 'Workers')
+        tab_widget.addTab(self.rides_widget, 'Rides')
+
         save_button = QPushButton(self)
         save_button.setText("SAVE")
 
