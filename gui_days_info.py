@@ -233,13 +233,13 @@ class DaysWidget(QWidget):
         }
 
 
-class yamlLoadDump(QWidget):
+class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.setGeometry(400, 400, 400, 600) # Increase default size and default position on desktop.
         self.setWindowTitle("Ridechecks App")
 
-        # Load YAML and use it to init DaysWidget
+        # Load YAML
         with open("input/days_info.yaml", "r") as f:
             days_info = yaml.safe_load(f)
         with open("input/rides_time.yaml", "r") as f:
@@ -248,10 +248,14 @@ class yamlLoadDump(QWidget):
             workers_time = yaml.safe_load(f)
 
         tab_widget = QTabWidget(self)
+
+        # Init DaysWidget
         rides = list(rides_time.keys())
         workers = list(workers_time.keys())
         self.days_widget = DaysWidget(self, days_info, rides, workers)
         tab_widget.addTab(self.days_widget, 'Weekly Info')
+        
+        # TODO: Init workers widget and rides widget
         
         save_button = QPushButton(self)
         save_button.setText("SAVE")
@@ -283,6 +287,6 @@ class yamlLoadDump(QWidget):
             event.ignore()
         
         
-window = yamlLoadDump()
+window = MainWindow()
 window.show()
 app.exec()

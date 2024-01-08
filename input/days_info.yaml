@@ -19,7 +19,10 @@ wed:
   - metal
 thu:
   time: 30
-  uaworkers: []
+  uaworkers:
+  - john
+  - bob
+  - richard
   uarides:
   - slow
   - green
