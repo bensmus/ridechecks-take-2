@@ -6,12 +6,7 @@ mon:
   - richard
   - josh
   - collin
-  uarides:
-  - red
-  - green
-  - wooden
-  - fast
-  - scary
+  uarides: []
 tue:
   time: 0
   uaworkers: []
@@ -28,10 +23,17 @@ thu:
   uaworkers: []
   uarides:
   - metal
+  - wooden
+  - red
+  - slow
 fri:
   time: 30
   uaworkers: []
-  uarides: []
+  uarides:
+  - fast
+  - green
+  - slow
+  - scary
 sat:
   time: 30
   uaworkers: []

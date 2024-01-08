@@ -26,35 +26,6 @@ app = QApplication([])
 # TODO Add comments and fix atrocious variable names
 
 
-class SingleElementWidget(QWidget):
-    """
-    Consists of button for deleting task and
-    label describing task.
-    """
-
-    task_deleted = Signal(bool)
-
-    def __init__(self, parent, task_text):
-        super().__init__(parent)
-
-        task_delete_button = QPushButton(self)
-        task_delete_button.setText("-")
-        task_delete_button.setSizePolicy(
-            QSizePolicy.Fixed, QSizePolicy.Fixed
-        )  # Makes the button small.
-        task_delete_button.clicked.connect(lambda: self.task_deleted.emit(True))
-        self.task_label = QLabel(self)
-        self.task_label.setText(task_text)
-
-        layout = QHBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)  # Remove spacing
-        layout.addWidget(task_delete_button)
-        layout.addWidget(self.task_label)
-
-    def read_task(self):
-        return self.task_label.text()
-
-
 class Dropdown(QWidget):
     def __init__(self, parent, elem_name: str, elems: List[str]):
         super().__init__(parent)
@@ -86,70 +57,99 @@ class Dropdown(QWidget):
         return self.combo_box.currentIndex() < 0
     
 
-class ElementSelectorWidget(QWidget):
+class ChosenWidget(QWidget):
     """
-    Given a set of all elements, this widgets allows the selection
-    of a subset of those elements.
+    Given a set of all elements, this widgets allows the user
+    to choose a subset of those elements.
 
     For example, a set of rides is given. Using this widget, it is 
-    possible to select a subset of those rides to be unavailable.
+    possible to choose some of those rides to be unavailable.
 
     Consists of: 
     - Dropdown
-    - Add element button
-    - List view of selected elements 
+    - Add button
+    - List view of chosen elements 
     """
-    def __init__(self, parent, elem_name, selected_elems, all_elems):
+    def __init__(self, parent, elem_name, chosen_elems, all_elems):
         super().__init__(parent)
 
-        self.task_widgets = []
+        self.elem_widgets = []
 
         dropdown = Dropdown(self, elem_name, all_elems)
 
-        task_add_button = QPushButton(self)  # Submit the task
+        add_button = QPushButton(self)  # Submit the task
 
-        task_add_button.setText(f"Add {elem_name}")
+        add_button.setText(f"Add {elem_name}")
 
-        task_holder = QWidget(self)
+        chosen_holder = QWidget(self)
         scroll_area = QScrollArea(self)
         scroll_area.setWidgetResizable(True) # This is critical, otherwise no tasks can be added.
-        scroll_area.setWidget(task_holder)
+        scroll_area.setWidget(chosen_holder)
 
         layout = QVBoxLayout(self)  # `self` argument is critical
         layout.addWidget(dropdown)
-        layout.addWidget(task_add_button)
+        layout.addWidget(add_button)
         layout.addWidget(scroll_area)  # QScrollArea is a widget
 
-        task_layout = QVBoxLayout(task_holder)
-        task_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        chosen_layout = QVBoxLayout(chosen_holder)
+        chosen_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-        def add_task(task_text):
-            dropdown.remove_elem(task_text)
-            task_widget = SingleElementWidget(self, task_text)
-            self.task_widgets.append(task_widget)
-            task_layout.addWidget(task_widget)
+        def add_elem(elem):
+            dropdown.remove_elem(elem)
+            elem_widget = ElementWidget(self, elem)
+            self.elem_widgets.append(elem_widget)
+            chosen_layout.addWidget(elem_widget)
 
             def delete_task():
-                self.task_widgets.remove(task_widget)
-                current = task_widget.read_task()
+                self.elem_widgets.remove(elem_widget)
+                current = elem_widget.read_task()
                 dropdown.add_elem(current)
-                task_widget.deleteLater()
+                elem_widget.deleteLater()
 
-            task_widget.task_deleted.connect(delete_task)
+            elem_widget.element_unchoose.connect(delete_task)
         
-        def add_task_from_dropdown():
+        def add_elem_from_dropdown():
             if dropdown.is_empty():
                 return
-            add_task(dropdown.current_elem())
+            add_elem(dropdown.current_elem())
 
-        task_add_button.clicked.connect(add_task_from_dropdown)
+        add_button.clicked.connect(add_elem_from_dropdown)
 
-        for selected_elem in selected_elems:
-            add_task(selected_elem)
+        for chosen_elem in chosen_elems:
+            add_elem(chosen_elem)
 
-    def read_tasks(self):
-        return [task_widget.read_task() for task_widget in self.task_widgets]
+    def read_chosen(self):
+        return [elem_widget.read_task() for elem_widget in self.elem_widgets]
 
+
+class ElementWidget(QWidget):
+    """
+    Consists of button for deleting task and
+    label describing task.
+    """
+
+    element_unchoose = Signal(bool)
+
+    def __init__(self, parent, task_text):
+        super().__init__(parent)
+
+        unchoose_button = QPushButton(self)
+        unchoose_button.setText("-")
+        unchoose_button.setSizePolicy(
+            QSizePolicy.Fixed, QSizePolicy.Fixed
+        )  # Makes the button small.
+        unchoose_button.clicked.connect(lambda: self.element_unchoose.emit(True))
+        self.label = QLabel(self)
+        self.label.setText(task_text)
+
+        layout = QHBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)  # Remove spacing
+        layout.addWidget(unchoose_button)
+        layout.addWidget(self.label)
+
+    def read_task(self):
+        return self.label.text()
+    
 
 class TimeEditWidget(QWidget):
     def __init__(self, parent, time):
@@ -190,10 +190,10 @@ class DayWidget(QWidget):
         layout = QVBoxLayout(self)
 
         self.time_edit_widget = TimeEditWidget(self, day_data["time"])
-        self.closed_rides_widget = ElementSelectorWidget(
+        self.closed_rides_widget = ChosenWidget(
             self, "closed ride", day_data["uarides"], rides
         )
-        self.absent_workers_widget = ElementSelectorWidget(
+        self.absent_workers_widget = ChosenWidget(
             self, "absent worker", day_data["uaworkers"], workers
         )
 
@@ -204,8 +204,8 @@ class DayWidget(QWidget):
     def read_day(self):
         return {
             "time": self.time_edit_widget.read_time(),
-            "uaworkers": self.absent_workers_widget.read_tasks(),
-            "uarides": self.closed_rides_widget.read_tasks(),
+            "uaworkers": self.absent_workers_widget.read_chosen(),
+            "uarides": self.closed_rides_widget.read_chosen(),
         }
 
 
