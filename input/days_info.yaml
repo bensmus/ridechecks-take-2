@@ -1,9 +1,9 @@
 mon:
   time: 43
-  uaworkers:
-  - john
-  - bob
-  uarides: []
+  uaworkers: []
+  uarides:
+  - wooden
+  - metal
 tue:
   time: 0
   uaworkers: []

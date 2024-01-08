@@ -14,16 +14,19 @@ from PySide6.QtWidgets import (
     QSizePolicy,
     QTabWidget,
     QMainWindow,
+    QComboBox,
 )
 from util import Day
-from typing import get_args
+from typing import get_args, List
 from PySide6.QtCore import Signal
 
 # Standard
 app = QApplication([])
 
+# TODO Add comments and fix atrocious variable names, use Dropdown class
 
-class SingleTaskWidget(QWidget):
+
+class SingleElementWidget(QWidget):
     """
     Consists of button for deleting task and
     label describing task.
@@ -52,14 +55,60 @@ class SingleTaskWidget(QWidget):
         return self.task_label.text()
 
 
-class AllTasksWidget(QWidget):
-    def __init__(self, parent, elem_name, elems):
+class Dropdown(QWidget):
+    def __init__(self, parent, elem_name: str, elems: List[str]):
+        super().__init__(parent)
+
+        label = QLabel(self)
+        label.setText(f"{elem_name.capitalize()}...")
+        self.combo_box = QComboBox(self)
+        for elem in elems:
+            self.add_elem(elem)
+        
+        layout = QVBoxLayout(self)
+        layout.add(label)
+        layout.add(self.combo_box)
+        
+    def remove_elem(self, elem: str) -> None:
+        for i in range(self.combo_box.count()):
+            if elem == self.combo_box.itemText(i):
+                self.combo_box.removeItem(i)
+                break
+
+    def add_elem(self, elem: str) -> None:
+        self.combo_box.addItem(elem)
+    
+    def current_elem(self) -> str:
+        return self.combo_box.currentText()
+    
+    def is_empty(self) -> bool:
+        return self.combo_box.currentIndex() < 0
+    
+
+class ElementSelectorWidget(QWidget):
+    """
+    Given a set of all elements, this widgets allows the selection
+    of a subset of those elements.
+
+    For example, a set of rides is given. Using this widget, it is 
+    possible to select a subset of those rides to be unavailable.
+
+    Consists of: 
+    - Dropdown selector
+    - Add element button
+    - List view of selected elements 
+    """
+    def __init__(self, parent, elem_name, selected_elems, all_elems):
         super().__init__(parent)
 
         self.task_widgets = []
 
-        task_input = QLineEdit(self)  # Enter the task here
-        task_input.setPlaceholderText(f"{elem_name.capitalize()}...")
+        dropdown_label = QLabel(self)
+        dropdown_label.setText(f"{elem_name.capitalize()}...")
+        dropdown = QComboBox(self)
+        for elem in all_elems:
+            dropdown.addItem(elem)
+
         task_add_button = QPushButton(self)  # Submit the task
 
         task_add_button.setText(f"Add {elem_name}")
@@ -70,7 +119,8 @@ class AllTasksWidget(QWidget):
         scroll_area.setWidget(task_holder)
 
         layout = QVBoxLayout(self)  # `self` argument is critical
-        layout.addWidget(task_input)
+        layout.addWidget(dropdown_label)
+        layout.addWidget(dropdown)
         layout.addWidget(task_add_button)
         layout.addWidget(scroll_area)  # QScrollArea is a widget
 
@@ -78,26 +128,32 @@ class AllTasksWidget(QWidget):
         task_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         def add_task(task_text):
-            task_widget = SingleTaskWidget(self, task_text)
+            # Ensure that we cannot add the task again: remove it from dropdown
+            for i in range(dropdown.count()):
+                text = dropdown.itemText(i)
+                if text == task_text:
+                    dropdown.removeItem(i)
+            task_widget = SingleElementWidget(self, task_text)
             self.task_widgets.append(task_widget)
             task_layout.addWidget(task_widget)
 
             def delete_task():
                 self.task_widgets.remove(task_widget)
+                current = task_widget.read_task()
+                dropdown.addItem(current)
                 task_widget.deleteLater()
 
             task_widget.task_deleted.connect(delete_task)
         
-        def add_task_from_input():
-            task_input_text = task_input.text()
-            if task_input_text != "":  # Do not do anything if no text is entered.
-                add_task(task_input_text)
-                task_input.clear()  # Clear text
+        def add_task_from_dropdown():
+            if dropdown.currentIndex() >= 0: # If there is a task to add:
+                current = dropdown.currentText()
+                add_task(current)
 
-        task_add_button.clicked.connect(add_task_from_input)
+        task_add_button.clicked.connect(add_task_from_dropdown)
 
-        for elem in elems:
-            add_task(elem)
+        for selected_elem in selected_elems:
+            add_task(selected_elem)
 
     def read_tasks(self):
         return [task_widget.read_task() for task_widget in self.task_widgets]
@@ -136,17 +192,17 @@ class TimeEditWidget(QWidget):
 
 
 class DayWidget(QWidget):
-    def __init__(self, parent, day_data):
+    def __init__(self, parent, day_data, rides, workers):
         super().__init__(parent)
 
         layout = QVBoxLayout(self)
 
         self.time_edit_widget = TimeEditWidget(self, day_data["time"])
-        self.closed_rides_widget = AllTasksWidget(
-            self, "closed ride", day_data["uarides"]
+        self.closed_rides_widget = ElementSelectorWidget(
+            self, "closed ride", day_data["uarides"], rides
         )
-        self.absent_workers_widget = AllTasksWidget(
-            self, "absent worker", day_data["uaworkers"]
+        self.absent_workers_widget = ElementSelectorWidget(
+            self, "absent worker", day_data["uaworkers"], workers
         )
 
         layout.addWidget(self.time_edit_widget)
@@ -162,12 +218,12 @@ class DayWidget(QWidget):
 
 
 class DaysWidget(QWidget):
-    def __init__(self, parent, days_data):
+    def __init__(self, parent, days_data, rides, workers):
         super().__init__(parent)
         self.day_widgets = {}
         tab_widget = QTabWidget(self)
         for day in get_args(Day):
-            day_widget = DayWidget(self, days_data[day])
+            day_widget = DayWidget(self, days_data[day], rides, workers)
             self.day_widgets[day] = day_widget
             tab_widget.addTab(day_widget, day.capitalize())
         layout = QVBoxLayout(self)  # Could have been QHBoxLayout, it doesn't matter.
@@ -184,9 +240,16 @@ class yamlLoadDump(QMainWindow):
         super().__init__()
         # Load YAML and use it to init DaysWidget
         with open("input/days_info.yaml", "r") as f:
-            days_data = yaml.safe_load(f)
-        self.days_widget = DaysWidget(self, days_data)
+            days_info = yaml.safe_load(f)
+        with open("input/rides_time.yaml", "r") as f:
+            rides_time = yaml.safe_load(f)
+        with open("input/workers_cannot_check.yaml", "r") as f:
+            workers_time = yaml.safe_load(f)
+        rides = list(rides_time.keys())
+        workers = list(workers_time.keys())
+        self.days_widget = DaysWidget(self, days_info, rides, workers)
         self.setCentralWidget(self.days_widget)
+        self.setGeometry(400, 400, 400, 600) # Increase default size and default position on desktop.
 
     def closeEvent(self, event):
         with open("input/days_info.yaml", "w") as f:
