@@ -11,8 +11,6 @@ from PySide6.QtWidgets import (
     QPushButton,
     QWidget,
     QScrollArea,
-    QSizePolicy,
-    QTabWidget,
     QMainWindow,
     QComboBox,
 )
@@ -234,7 +232,7 @@ class DaysWidget(QWidget):
         }
 
 
-class yamlLoadDump(QMainWindow):
+class yamlLoadDump(QWidget):
     def __init__(self):
         super().__init__()
         # Load YAML and use it to init DaysWidget
@@ -246,13 +244,17 @@ class yamlLoadDump(QMainWindow):
             workers_time = yaml.safe_load(f)
         rides = list(rides_time.keys())
         workers = list(workers_time.keys())
-        self.days_widget = DaysWidget(self, days_info, rides, workers)
-        self.setCentralWidget(self.days_widget)
+        layout = QVBoxLayout(self)
+        days_widget = DaysWidget(self, days_info, rides, workers)
+        save_button = QPushButton(self)
+        save_button.setText("SAVE")
+        def save():
+            with open("input/days_info.yaml", "w") as f:
+                yaml.safe_dump(days_widget.read_days(), f, sort_keys=False)
+        save_button.clicked.connect(save)
+        layout.addWidget(days_widget)
+        layout.addWidget(save_button)
         self.setGeometry(400, 400, 400, 600) # Increase default size and default position on desktop.
-
-    def closeEvent(self, event):
-        with open("input/days_info.yaml", "w") as f:
-            yaml.safe_dump(self.days_widget.read_days(), f, sort_keys=False)
 
 
 window = yamlLoadDump()

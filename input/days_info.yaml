@@ -1,5 +1,5 @@
 mon:
-  time: 43
+  time: 678
   uaworkers:
   - richard
   - john
@@ -7,6 +7,11 @@ mon:
   uarides:
   - wooden
   - green
+  - metal
+  - red
+  - fast
+  - slow
+  - scary
 tue:
   time: 0
   uaworkers: []
@@ -15,7 +20,7 @@ tue:
   - metal
   - red
 wed:
-  time: 213
+  time: 60
   uaworkers:
   - john
   - bob
@@ -30,18 +35,14 @@ thu:
   - green
 fri:
   time: 30
-  uaworkers:
-  - john
+  uaworkers: []
   uarides:
   - slow
   - scary
 sat:
   time: 30
   uaworkers:
-  - john
   - bob
-  - richard
-  - josh
   - collin
   uarides:
   - red
@@ -49,6 +50,5 @@ sun:
   time: 30
   uaworkers:
   - richard
-  - josh
   - collin
   uarides: []
